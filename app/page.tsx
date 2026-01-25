@@ -124,7 +124,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-4">
              <a href="tel:84996434403" className="hidden md:block font-bold text-slate-900 hover:text-blue-600">8 (499) 643-44-03</a>
              <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden p-2 text-slate-900"><Menu className="w-7 h-7" /></button>
-             <button onClick={() => window.open('https://t.me/YOUR_BOT')} className="hidden lg:flex bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-bold transition shadow-lg shadow-blue-200 items-center gap-2">
+             <button onClick={() => window.open('https://t.me/Diplompro777_bot')} className="hidden lg:flex bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-bold transition shadow-lg shadow-blue-200 items-center gap-2">
                <Send className="w-4 h-4" /> Telegram
              </button>
           </div>
