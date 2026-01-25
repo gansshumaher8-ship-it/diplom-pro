@@ -99,7 +99,7 @@ export default function LandingPage() {
               <a href="#delivery" onClick={() => setIsMobileMenuOpen(false)}>Доставка</a>
               <a href="#faq" onClick={() => setIsMobileMenuOpen(false)}>Вопросы</a>
            </nav>
-           <button onClick={() => window.open('https://t.me/YOUR_BOT')} className="mt-auto w-full bg-blue-600 text-white py-4 rounded-xl font-bold">Написать в Telegram</button>
+           <button onClick={() => window.open('https://t.me/Diplompro777_bot')} className="mt-auto w-full bg-blue-600 text-white py-4 rounded-xl font-bold">Написать в Telegram</button>
         </div>
       )}
 
