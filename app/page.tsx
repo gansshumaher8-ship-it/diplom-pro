@@ -536,4 +536,4 @@ export default function LandingPage() {
       </footer>
     </div>
   );
-}
+}// Обновление версии сайта v2
