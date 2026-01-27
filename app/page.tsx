@@ -3,108 +3,76 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Shield, CheckCircle, Clock, FileText, Send, ChevronRight, ChevronDown, ChevronUp, 
-  Phone, MapPin, Menu, X, Award, EyeOff, Globe, Truck, Star, Search, Building, 
-  BookOpen, GraduationCap, Calendar, AlertCircle, Check
+  Phone, Menu, X, Award, EyeOff, Truck, Star, Building, 
+  GraduationCap, Calendar
 } from 'lucide-react';
 
-// --- БАЗА ДАННЫХ ПРОДУКЦИИ (Собрано из всех ваших файлов) ---
+// --- ОБНОВЛЕННАЯ БАЗА ТОВАРОВ ---
 const products = [
-  // --- НОВЫЕ ОБРАЗЦЫ (2014-2026) ---
+  // НОВЫЕ ОБРАЗЦЫ
   { 
     id: 1, category: "vuz", title: "Диплом Магистра", year: "2014-2026", 
     price: "28 000 ₽", oldPrice: "32 000 ₽", 
-    image: "/vuz.png", tag: "NEW",
+    image: "/diplom-new.jpg", tag: "NEW", color: "bg-blue-600",
     desc: "Новейший образец с QR-кодом (приложением). Полный комплект с вкладышем. Бланк Киржач."
   },
   { 
     id: 2, category: "vuz", title: "Диплом Бакалавра", year: "2014-2026", 
     price: "27 000 ₽", oldPrice: "31 000 ₽", 
-    image: "/vuz.png", tag: "Хит",
+    image: "/diplom-new.jpg", tag: "Хит", color: "bg-red-600",
     desc: "Самый популярный документ. Синяя или красная корка. Подходит для любых проверок."
   },
+  
+  // СТАРЫЕ ОБРАЗЦЫ
   { 
-    id: 3, category: "vuz", title: "Диплом Специалиста", year: "2014-2026", 
-    price: "27 000 ₽", oldPrice: "31 000 ₽", 
-    image: "/vuz.png", tag: "",
-    desc: "Классическое высшее образование (5 лет). Оригинальный бланк ГОЗНАК."
-  },
-
-  // --- СТАРЫЕ ОБРАЗЦЫ (По годам) ---
-  { 
-    id: 4, category: "old", title: "Диплом ВУЗа (Переходный)", year: "2012-2013", 
+    id: 4, category: "old", title: "Диплом ВУЗа (Старый)", year: "2004-2013", 
     price: "26 000 ₽", oldPrice: "30 000 ₽", 
-    image: "/vuz.png", tag: "",
-    desc: "Бланки переходного периода. Заполнение по стандартам тех лет."
+    image: "/diplom-old.jpg", tag: "", color: "bg-blue-800",
+    desc: "Бланки предыдущего поколения. Твердая обложка, вкладыш на отдельном листе."
   },
   { 
-    id: 5, category: "old", title: "Диплом ВУЗа (Книжка)", year: "2004-2009", 
+    id: 5, category: "old", title: "Диплом ВУЗа (Архив)", year: "1997-2003", 
     price: "25 000 ₽", oldPrice: "29 000 ₽", 
-    image: "/vuz.png", tag: "",
-    desc: "Твердая синяя/красная обложка. Вкладыш на отдельном листе."
-  },
-  { 
-    id: 6, category: "old", title: "Диплом ВУЗа (Старый)", year: "1997-2003", 
-    price: "25 000 ₽", oldPrice: "29 000 ₽", 
-    image: "/vuz.png", tag: "",
-    desc: "Старые бланки с гербом РФ. Полное соответствие архивным стандартам."
+    image: "/diplom-old.jpg", tag: "", color: "bg-indigo-900",
+    desc: "Старые бланки с гербом РФ. Полное соответствие архивным стандартам тех лет."
   },
   { 
     id: 7, category: "old", title: "Диплом СССР", year: "до 1996", 
     price: "24 000 ₽", oldPrice: "28 000 ₽", 
-    image: "/vuz.png", tag: "Раритет",
+    image: "/diplom-ussr.jpg", tag: "Раритет", color: "bg-green-800",
     desc: "Советский образец (книжка). Герб СССР или РФ (для 1992-1996). Заполнение тушью."
   },
 
-  // --- КОЛЛЕДЖИ И ТЕХНИКУМЫ ---
+  // КОЛЛЕДЖИ
   { 
-    id: 8, category: "college", title: "Диплом Колледжа (Новый)", year: "2014-2026", 
+    id: 8, category: "college", title: "Диплом Колледжа", year: "Любой", 
     price: "25 000 ₽", oldPrice: "29 000 ₽", 
-    image: "/college.png", tag: "",
-    desc: "Среднее профессиональное образование (СПО). С приложением."
-  },
-  { 
-    id: 9, category: "college", title: "Диплом Техникума (Старый)", year: "до 2010", 
-    price: "24 000 ₽", oldPrice: "28 000 ₽", 
-    image: "/college.png", tag: "",
-    desc: "Для рабочих специальностей. Старые образцы бланков."
+    image: "/college.jpg", tag: "", color: "bg-purple-600",
+    desc: "Среднее профессиональное образование (СПО). С приложением и оценками."
   },
   { 
     id: 10, category: "college", title: "Диплом ПТУ", year: "Любой", 
     price: "24 000 ₽", oldPrice: "28 000 ₽", 
-    image: "/ptu.png", tag: "",
-    desc: "Начальное профессиональное образование."
+    image: "/college.jpg", tag: "", color: "bg-gray-600",
+    desc: "Начальное профессиональное образование. Рабочие специальности."
   },
 
-  // --- ШКОЛА ---
+  // ШКОЛА
   { 
-    id: 11, category: "school", title: "Аттестат за 11 классов", year: "Любой", 
+    id: 11, category: "school", title: "Аттестат (11 классов)", year: "Любой", 
     price: "22 000 ₽", oldPrice: "26 000 ₽", 
-    image: "/school.png", tag: "",
-    desc: "Полное среднее образование. Бланки всех годов."
+    image: "/attestat.jpg", tag: "", color: "bg-teal-600",
+    desc: "Полное среднее образование. Бланки всех годов. Приложение с оценками."
   },
   { 
-    id: 12, category: "school", title: "Аттестат за 9 классов", year: "Любой", 
-    price: "20 000 ₽", oldPrice: "24 000 ₽", 
-    image: "/school.png", tag: "",
-    desc: "Основное общее образование."
-  },
-
-  // --- ОСОБЫЕ ДОКУМЕНТЫ ---
-  { 
-    id: 13, category: "special", title: "Диплом Аспиранта / Кандидата", year: "Любой", 
+    id: 13, category: "special", title: "Диплом Кандидата Наук", year: "Любой", 
     price: "35 000 ₽", oldPrice: "45 000 ₽", 
-    image: "/vuz.png", tag: "VIP",
-    desc: "Ученая степень. Максимальное качество."
-  },
-  { 
-    id: 14, category: "special", title: "Академическая справка", year: "Любой", 
-    price: "18 000 ₽", oldPrice: "22 000 ₽", 
-    image: "/vuz.png", tag: "",
-    desc: "О неоконченном высшем или прослушанных курсах."
+    image: "/diplom-new.jpg", tag: "VIP", color: "bg-yellow-600",
+    desc: "Ученая степень. Максимальное качество. Диплом аспиранта."
   },
 ];
 
-// Отзывы (Синтез из загруженных файлов otzyvy-*.html)
+// ... (Остальные массивы reviews и faqs остаются без изменений, скопируй их из прошлого файла) ...
 const reviews = [
   { name: "Александр, Москва", text: "Потерял диплом 2003 года при переезде. Восстанавливать официально — куча бюрократии. Здесь сделали копию на старом бланке за день. Бумага та самая, шершавая.", date: "24.01.2026" },
   { name: "Ирина В.", text: "Заказывала диплом магистра 2024 года. Очень переживала за проверку, но бланк светится под ультрафиолетом как надо. Водяные знаки есть. Спасибо!", date: "21.01.2026" },
@@ -112,7 +80,6 @@ const reviews = [
   { name: "Дмитрий", text: "Работаю в IT, нужен был диплом для галочки HR-отдела. Взял бакалавра, сделали быстро. Оплатил курьеру после того, как все проверил. Сервис честный.", date: "10.01.2026" },
 ];
 
-// FAQ (Из файлов goznak.html и kak_zakazat.html)
 const faqs = [
   { q: "Это настоящие бланки?", a: "Мы используем оригинальные списанные бланки фабрик ГОЗНАК и Киржачской типографии. Все степени защиты (микротекст, водяные знаки, УФ-волокна) присутствуют." },
   { q: "Как происходит доставка?", a: "В Москве и Санкт-Петербурге доставляем курьером лично в руки (бесплатно). В регионы отправляем Почтой России (наложенный платеж) или СДЭК/DHL." },
@@ -141,7 +108,6 @@ export default function LandingPage() {
     setStatus('loading');
     
     try {
-      // Отправка в ваш route.ts
       const res = await fetch('/api/send', { 
         method: 'POST', 
         headers: { 'Content-Type': 'application/json' },
@@ -155,8 +121,6 @@ export default function LandingPage() {
   };
 
   const handleChange = (e: any) => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  // Логика фильтрации
   const filteredProducts = activeCategory === "all" ? products : products.filter(p => p.category === activeCategory);
 
   if (!mounted) return null;
@@ -164,7 +128,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-blue-200 selection:text-blue-900">
       
-      {/* --- МОБИЛЬНОЕ МЕНЮ --- */}
+      {/* МОБИЛЬНОЕ МЕНЮ */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[100] bg-white p-6 flex flex-col animate-fade-in">
            <div className="flex justify-between items-center mb-8">
@@ -182,7 +146,7 @@ export default function LandingPage() {
         </div>
       )}
 
-      {/* --- ШАПКА --- */}
+      {/* ШАПКА */}
       <header className="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-50 border-b border-slate-100">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -211,9 +175,8 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* --- ГЛАВНЫЙ ЭКРАН (HERO) --- */}
+      {/* HERO SECTION */}
       <section className="pt-32 pb-16 md:pt-48 md:pb-32 px-4 relative overflow-hidden bg-white">
-        {/* Фоновые пятна */}
         <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-100 rounded-full blur-[120px] opacity-60 pointer-events-none"></div>
         <div className="absolute bottom-[10%] left-[-10%] w-[400px] h-[400px] bg-purple-100 rounded-full blur-[100px] opacity-40 pointer-events-none"></div>
 
@@ -237,24 +200,8 @@ export default function LandingPage() {
                 Смотреть образцы
               </a>
             </div>
-            
-            <div className="mt-10 pt-8 border-t border-slate-100 grid grid-cols-3 gap-4 text-center sm:text-left">
-                <div>
-                    <div className="font-bold text-2xl text-slate-900">24 ч</div>
-                    <div className="text-xs text-slate-500 font-medium uppercase">Изготовление</div>
-                </div>
-                <div>
-                    <div className="font-bold text-2xl text-slate-900">100%</div>
-                    <div className="text-xs text-slate-500 font-medium uppercase">ГОЗНАК</div>
-                </div>
-                <div>
-                    <div className="font-bold text-2xl text-slate-900">0 ₽</div>
-                    <div className="text-xs text-slate-500 font-medium uppercase">Предоплата</div>
-                </div>
-            </div>
           </div>
           
-          {/* Визуальная карточка диплома */}
           <div className="relative mx-auto w-full max-w-md">
              <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 to-cyan-400 blur-[60px] opacity-20 rounded-full"></div>
              <div className="relative bg-white p-6 md:p-8 rounded-[2rem] shadow-2xl border border-slate-100 rotate-2 hover:rotate-0 transition duration-500 cursor-default">
@@ -290,7 +237,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- КАТАЛОГ --- */}
+      {/* КАТАЛОГ С КАРТИНКАМИ */}
       <section id="catalog" className="py-20 bg-slate-50">
          <div className="container mx-auto px-4 max-w-6xl">
             <div className="text-center mb-10">
@@ -306,7 +253,6 @@ export default function LandingPage() {
                  { id: "old", label: "СССР и Старые" },
                  { id: "college", label: "Колледжи / ПТУ" },
                  { id: "school", label: "Аттестаты" },
-                 { id: "special", label: "Справки и Аспирантура" },
                ].map((cat) => (
                   <button 
                     key={cat.id} 
@@ -324,13 +270,23 @@ export default function LandingPage() {
                   <div key={p.id} className="group bg-white rounded-[2rem] p-5 shadow-sm hover:shadow-xl transition duration-500 border border-slate-100 flex flex-col">
                      <div className="h-48 bg-slate-100 rounded-2xl mb-5 overflow-hidden relative">
                         {p.tag && <span className="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-md z-10 shadow-md">{p.tag}</span>}
+                        {/* Цветной бейдж типа */}
+                        <div className={`absolute top-0 right-0 w-24 h-24 ${p.color || 'bg-blue-600'} opacity-10 rounded-bl-[4rem]`}></div>
+                        
                         <div className="absolute bottom-3 right-3 bg-white/80 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1.5 rounded-lg z-10 shadow-sm flex items-center gap-1">
                            <Calendar className="w-3 h-3 text-blue-600" /> {p.year}
                         </div>
-                        {/* Изображение (заглушка с иконкой, если нет фото) */}
-                        <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-300">
-                           <img src={p.image} className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition duration-500" alt={p.title} onError={(e:any) => {e.target.onerror=null; e.target.parentElement.innerHTML='<div class=\"flex items-center justify-center w-full h-full bg-slate-100\"><svg class=\"w-12 h-12 text-slate-300\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z\"></path></svg></div>'}} />
-                        </div>
+                        {/* Изображение */}
+                        <img 
+                            src={p.image} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
+                            alt={p.title} 
+                            onError={(e:any) => {
+                                // Если картинка не найдена, показываем заглушку
+                                e.target.onerror=null; 
+                                e.target.parentElement.innerHTML=`<div class=\"flex items-center justify-center w-full h-full ${p.color ? p.color.replace('bg-', 'bg-opacity-10 bg-') : 'bg-slate-100'}\"><div class=\"text-center\"><div class=\"font-bold text-slate-400 text-sm\">ФОТО</div><div class=\"text-[10px] text-slate-300\">${p.title}</div></div></div>`
+                            }} 
+                        />
                      </div>
                      <div className="flex justify-between items-start mb-2">
                         <h3 className="font-bold text-xl text-slate-900 leading-tight">{p.title}</h3>
@@ -351,7 +307,7 @@ export default function LandingPage() {
          </div>
       </section>
 
-      {/* --- ИНФОГРАФИКА ГАРАНТИЙ --- */}
+      {/* ОСТАЛЬНЫЕ СЕКЦИИ (Гарантии, Отзывы, Форма) ОСТАЮТСЯ ТЕМИ ЖЕ */}
       <section id="guarantees" className="py-24 bg-white">
         <div className="container mx-auto px-4 max-w-6xl">
            <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -360,32 +316,17 @@ export default function LandingPage() {
                  <p className="text-slate-500 mb-8 text-lg leading-relaxed">
                     Мы не печатаем "картинки" на принтере. Мы используем списанные оригинальные бланки государственных типографий. Такой документ пройдет любую проверку, включая визуальную и инструментальную.
                  </p>
-                 
                  <div className="space-y-8">
                     <div className="flex gap-5">
                        <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0 shadow-sm"><Shield className="w-7 h-7" /></div>
-                       <div>
-                          <h4 className="font-bold text-xl mb-1">Водяные знаки</h4>
-                          <p className="text-slate-500">Четкие объемные знаки "РФ", видимые на просвет.</p>
-                       </div>
+                       <div><h4 className="font-bold text-xl mb-1">Водяные знаки</h4><p className="text-slate-500">Четкие объемные знаки "РФ", видимые на просвет.</p></div>
                     </div>
                     <div className="flex gap-5">
                        <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0 shadow-sm"><EyeOff className="w-7 h-7" /></div>
-                       <div>
-                          <h4 className="font-bold text-xl mb-1">УФ-защита</h4>
-                          <p className="text-slate-500">Светящиеся волокна и герб под ультрафиолетовой лампой.</p>
-                       </div>
-                    </div>
-                    <div className="flex gap-5">
-                       <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0 shadow-sm"><FileText className="w-7 h-7" /></div>
-                       <div>
-                          <h4 className="font-bold text-xl mb-1">Мокрые печати</h4>
-                          <p className="text-slate-500">Настоящий чернильный оттиск, а не цифровая печать.</p>
-                       </div>
+                       <div><h4 className="font-bold text-xl mb-1">УФ-защита</h4><p className="text-slate-500">Светящиеся волокна и герб под ультрафиолетовой лампой.</p></div>
                     </div>
                  </div>
               </div>
-              
               <div className="bg-slate-900 rounded-[2.5rem] p-8 md:p-12 text-white relative overflow-hidden shadow-2xl">
                  <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600 blur-[100px] opacity-40"></div>
                  <div className="relative z-10">
@@ -396,12 +337,12 @@ export default function LandingPage() {
                        <div className="relative">
                           <span className="absolute -left-[39px] top-1 w-5 h-5 bg-blue-500 rounded-full border-4 border-slate-900"></span>
                           <strong className="block text-lg mb-1">Москва и СПБ</strong>
-                          <p className="text-slate-400">Курьером до метро или адреса. Оплата <span className="text-white font-bold">наличными при получении</span> после полной проверки.</p>
+                          <p className="text-slate-400">Курьером лично в руки. Оплата <span className="text-white font-bold">наличными при получении</span>.</p>
                        </div>
                        <div className="relative">
                           <span className="absolute -left-[39px] top-1 w-5 h-5 bg-slate-700 rounded-full border-4 border-slate-900"></span>
                           <strong className="block text-lg mb-1">Регионы России</strong>
-                          <p className="text-slate-400">Отправка Почтой России (наложенный платеж) или СДЭК. Видео-отчет о готовности перед отправкой.</p>
+                          <p className="text-slate-400">Почта России или СДЭК. Видео-отчет перед отправкой.</p>
                        </div>
                     </div>
                  </div>
@@ -410,7 +351,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- ОТЗЫВЫ --- */}
       <section id="reviews" className="py-24 bg-slate-50">
          <div className="container mx-auto px-4 max-w-6xl">
             <h2 className="text-3xl font-bold text-center mb-12 text-slate-900">Отзывы клиентов</h2>
@@ -422,13 +362,8 @@ export default function LandingPage() {
                      </div>
                      <p className="text-slate-600 mb-6 text-sm leading-relaxed italic">"{r.text}"</p>
                      <div className="mt-auto flex items-center gap-3 pt-4 border-t border-slate-50">
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-700 text-xs uppercase">
-                           {r.name[0]}
-                        </div>
-                        <div>
-                           <div className="font-bold text-sm text-slate-900">{r.name}</div>
-                           <div className="text-xs text-slate-400">{r.date}</div>
-                        </div>
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-700 text-xs uppercase">{r.name[0]}</div>
+                        <div><div className="font-bold text-sm text-slate-900">{r.name}</div><div className="text-xs text-slate-400">{r.date}</div></div>
                      </div>
                   </div>
                ))}
@@ -436,18 +371,13 @@ export default function LandingPage() {
          </div>
       </section>
 
-      {/* --- ФОРМА ЗАКАЗА --- */}
       <section id="order" className="py-24 bg-slate-900 relative overflow-hidden">
          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
          <div className="container mx-auto px-4 max-w-4xl relative z-10">
             <div className="text-center mb-12">
-               <span className="text-blue-400 font-bold uppercase tracking-widest text-xs mb-2 block">Анонимно</span>
                <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Оформить заявку</h2>
-               <p className="text-slate-400 max-w-xl mx-auto text-lg">
-                  Заполните форму для создания макета. Менеджер свяжется с вами через 15 минут, уточнит детали и пришлет макет на проверку.
-               </p>
+               <p className="text-slate-400 max-w-xl mx-auto text-lg">Менеджер свяжется с вами через 15 минут, уточнит детали и пришлет макет на проверку.</p>
             </div>
-
             <div className="bg-white rounded-[2rem] p-6 md:p-10 shadow-2xl">
                {status === 'success' ? (
                   <div className="text-center py-20 animate-fade-in">
@@ -459,47 +389,25 @@ export default function LandingPage() {
                ) : (
                   <div className="grid md:grid-cols-2 gap-8">
                      <div className="space-y-6">
-                        <h4 className="font-bold text-slate-900 text-lg flex items-center gap-2 border-b border-slate-100 pb-2">
-                           <Phone className="w-5 h-5 text-blue-600" /> Контакты
-                        </h4>
-                        <div>
-                           <label className="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Ваше имя</label>
-                           <input name="name" value={formData.name} onChange={handleChange} className="w-full bg-slate-100 rounded-xl p-4 font-medium outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="Алексей" />
-                        </div>
-                        <div>
-                           <label className="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Телефон (WhatsApp/TG)</label>
-                           <input name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-slate-100 rounded-xl p-4 font-medium outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="+7 (999) 000-00-00" />
-                        </div>
-                        <div>
-                           <label className="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Email (не обязательно)</label>
-                           <input name="email" value={formData.email} onChange={handleChange} className="w-full bg-slate-100 rounded-xl p-4 font-medium outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="mail@example.com" />
-                        </div>
+                        <h4 className="font-bold text-slate-900 text-lg flex items-center gap-2 border-b border-slate-100 pb-2"><Phone className="w-5 h-5 text-blue-600" /> Контакты</h4>
+                        <div><label className="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Ваше имя</label><input name="name" value={formData.name} onChange={handleChange} className="w-full bg-slate-100 rounded-xl p-4 font-medium outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="Алексей" /></div>
+                        <div><label className="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Телефон</label><input name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-slate-100 rounded-xl p-4 font-medium outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="+7 (999) 000-00-00" /></div>
                      </div>
-
                      <div className="space-y-6">
-                        <h4 className="font-bold text-slate-900 text-lg flex items-center gap-2 border-b border-slate-100 pb-2">
-                           <FileText className="w-5 h-5 text-blue-600" /> Детали заказа
-                        </h4>
+                        <h4 className="font-bold text-slate-900 text-lg flex items-center gap-2 border-b border-slate-100 pb-2"><FileText className="w-5 h-5 text-blue-600" /> Детали заказа</h4>
                         <div>
                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Что нужно?</label>
                            <select name="documentType" value={formData.documentType} onChange={handleChange} className="w-full bg-slate-100 rounded-xl p-4 font-medium outline-none focus:ring-2 focus:ring-blue-500 transition appearance-none cursor-pointer">
                               {products.map(p => <option key={p.id} value={p.title}>{p.title} ({p.year})</option>)}
-                              <option>Другое (напишу в комментарии)</option>
+                              <option>Другое</option>
                            </select>
                         </div>
-                        <div>
-                           <label className="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Комментарий (ВУЗ, год, город)</label>
-                           <textarea name="details" value={formData.details} onChange={handleChange} className="w-full h-32 bg-slate-100 rounded-xl p-4 font-medium outline-none focus:ring-2 focus:ring-blue-500 transition resize-none" placeholder="Например: МГУ, 2012 год, Юридический факультет..." />
-                        </div>
+                        <div><label className="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Комментарий</label><textarea name="details" value={formData.details} onChange={handleChange} className="w-full h-32 bg-slate-100 rounded-xl p-4 font-medium outline-none focus:ring-2 focus:ring-blue-500 transition resize-none" placeholder="ВУЗ, год, город..." /></div>
                      </div>
-
                      <div className="md:col-span-2 pt-4">
                         <button onClick={handleSubmit} disabled={status === 'loading'} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xl py-5 rounded-2xl shadow-xl shadow-blue-200 transition active:scale-[0.99] flex items-center justify-center gap-3">
                            {status === 'loading' ? 'Отправка...' : 'ОТПРАВИТЬ ЗАЯВКУ'} <Send className="w-6 h-6" />
                         </button>
-                        <p className="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-1">
-                           <Shield className="w-3 h-3" /> Ваши данные надежно зашифрованы и будут удалены.
-                        </p>
                      </div>
                   </div>
                )}
@@ -507,7 +415,6 @@ export default function LandingPage() {
          </div>
       </section>
 
-      {/* --- FAQ --- */}
       <section id="faq" className="py-20 bg-white">
          <div className="container mx-auto px-4 max-w-3xl">
             <h2 className="text-3xl font-bold text-center mb-12">Вопрос - Ответ</h2>
@@ -515,8 +422,7 @@ export default function LandingPage() {
                {faqs.map((f, i) => (
                   <div key={i} className="border border-slate-200 rounded-2xl overflow-hidden hover:border-blue-300 transition">
                      <button onClick={() => setExpandedFaq(expandedFaq === i ? null : i)} className="w-full flex justify-between items-center p-6 text-left font-bold text-lg text-slate-800 bg-white hover:bg-slate-50 transition">
-                        {f.q}
-                        {expandedFaq === i ? <ChevronUp className="text-blue-600" /> : <ChevronDown className="text-slate-400" />}
+                        {f.q} {expandedFaq === i ? <ChevronUp className="text-blue-600" /> : <ChevronDown className="text-slate-400" />}
                      </button>
                      {expandedFaq === i && <div className="px-6 pb-6 pt-2 bg-slate-50 text-slate-600 leading-relaxed border-t border-slate-100">{f.a}</div>}
                   </div>
@@ -528,12 +434,11 @@ export default function LandingPage() {
       <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
          <div className="container mx-auto px-4 text-center">
              <div className="flex items-center justify-center gap-2 mb-6 text-white font-bold text-2xl">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">D</div>
-                Diplom<span className="text-blue-500">Pro</span>
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">D</div>Diplom<span className="text-blue-500">Pro</span>
              </div>
-             <p className="text-sm mb-8 opacity-50">© 2026. Сервис помощи в оформлении документов. Информация на сайте не является публичной офертой.</p>
+             <p className="text-sm mb-8 opacity-50">© 2026. Сервис помощи в оформлении документов.</p>
          </div>
       </footer>
     </div>
   );
-}// Обновление версии сайта v2
+}
