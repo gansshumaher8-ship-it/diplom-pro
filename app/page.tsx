@@ -13,13 +13,13 @@ const products = [
   { 
     id: 1, category: "vuz", title: "Диплом Магистра", year: "2014-2026", 
     price: "28 000 ₽", oldPrice: "32 000 ₽", 
-    image: "/diplom-new.jpg", tag: "NEW", color: "bg-blue-600",
+    image: "/vuz.png", tag: "NEW", color: "bg-blue-600",
     desc: "Новейший образец с QR-кодом (приложением). Полный комплект с вкладышем. Бланк Киржач."
   },
   { 
     id: 2, category: "vuz", title: "Диплом Бакалавра", year: "2014-2026", 
     price: "27 000 ₽", oldPrice: "31 000 ₽", 
-    image: "/diplom-new.jpg", tag: "Хит", color: "bg-red-600",
+    image: "/bakalavr.jpg", tag: "Хит", color: "bg-red-600",
     desc: "Самый популярный документ. Синяя или красная корка. Подходит для любых проверок."
   },
   
@@ -33,13 +33,13 @@ const products = [
   { 
     id: 5, category: "old", title: "Диплом ВУЗа (Архив)", year: "1997-2003", 
     price: "25 000 ₽", oldPrice: "29 000 ₽", 
-    image: "/diplom-old.jpg", tag: "", color: "bg-indigo-900",
+    image: "/arhiv.jpg", tag: "", color: "bg-indigo-900",
     desc: "Старые бланки с гербом РФ. Полное соответствие архивным стандартам тех лет."
   },
   { 
     id: 7, category: "old", title: "Диплом СССР", year: "до 1996", 
     price: "24 000 ₽", oldPrice: "28 000 ₽", 
-    image: "/diplom-ussr.jpg", tag: "Раритет", color: "bg-green-800",
+    image: "/sssr-300x198.jpg", tag: "Раритет", color: "bg-green-800",
     desc: "Советский образец (книжка). Герб СССР или РФ (для 1992-1996). Заполнение тушью."
   },
 
@@ -53,7 +53,7 @@ const products = [
   { 
     id: 10, category: "college", title: "Диплом ПТУ", year: "Любой", 
     price: "24 000 ₽", oldPrice: "28 000 ₽", 
-    image: "/college.jpg", tag: "", color: "bg-gray-600",
+    image: "/ptu.png", tag: "", color: "bg-gray-600",
     desc: "Начальное профессиональное образование. Рабочие специальности."
   },
 
@@ -67,7 +67,7 @@ const products = [
   { 
     id: 13, category: "special", title: "Диплом Кандидата Наук", year: "Любой", 
     price: "35 000 ₽", oldPrice: "45 000 ₽", 
-    image: "/diplom-new.jpg", tag: "VIP", color: "bg-yellow-600",
+    image: "/kandidat.jpg", tag: "VIP", color: "bg-yellow-600",
     desc: "Ученая степень. Максимальное качество. Диплом аспиранта."
   },
 ];
