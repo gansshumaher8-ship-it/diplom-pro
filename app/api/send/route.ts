@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const token = '8342323616:AAG1HzWu04JBGH9Wda8tc3UyRfJhlVaf6Es'; 
     
     // Вставь ID чата прямо в кавычки, например: '12345678'
-    const chatId = '8342323616'; 
+    const chatId = '7833997285'; 
     // ----------------------------------------
 
     console.log("Попытка отправки...", { name, phone, token: token?.slice(0, 5), chatId });
