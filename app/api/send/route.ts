@@ -2,41 +2,36 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const data = await req.json();
+    // Получаем данные из новой формы
+    const { name, phone, email, city, documentType, details } = await req.json();
 
+    // 1. Проверка настроек (Токен и ID чата должны быть в .env или настройках Vercel)
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
 
     if (!token || !chatId) {
-      console.error('Tokens missing');
-      return NextResponse.json({ error: 'Нет токенов' }, { status: 500 });
+      console.error("Токен или Chat ID не найдены!");
+      return NextResponse.json({ error: 'Config missing' }, { status: 500 });
     }
 
-    // Собираем сообщение со ВСЕМИ полями
+    // 2. Формируем красивое сообщение
     const message = `
-🔥 <b>НОВАЯ ПОЛНАЯ ЗАЯВКА!</b>
+🔥 <b>НОВАЯ ЗАЯВКА (DiplomPro)</b>
 
-➖➖ <b>КОНТАКТЫ</b> ➖➖
-👤 <b>Имя:</b> ${data.name}
-📱 <b>Телефон:</b> ${data.phone}
-📧 <b>Email:</b> ${data.email || '-'}
-⏰ <b>Время связи:</b> ${data.time || '-'}
-🏙 <b>Город:</b> ${data.city || '-'}
+👤 <b>Клиент:</b> ${name}
+📞 <b>Телефон:</b> <code>${phone}</code>
+📧 <b>Email:</b> ${email ? email : 'Не указан'}
+🏙 <b>Город:</b> ${city || 'Не указан'}
 
-➖➖ <b>ДОКУМЕНТ</b> ➖➖
-📄 <b>Тип:</b> ${data.documentType}
-📝 <b>ФИО в диплом:</b> ${data.recipientName || '-'}
-📅 <b>Дата рождения:</b> ${data.dob || '-'}
-🎓 <b>ВУЗ:</b> ${data.institution || '-'}
-⏳ <b>Годы:</b> ${data.years || '-'}
-👨‍🎓 <b>Специальность:</b> ${data.specialty || '-'}
-📂 <b>Пред. документ:</b> ${data.previousDoc || '-'}
-
-💬 <b>Пожелания:</b>
-${data.wishes || 'Нет комментариев'}
+📄 <b>Документ:</b> ${documentType}
+📝 <b>Комментарий:</b>
+<i>${details || 'Нет комментария'}</i>
     `;
 
-    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    // 3. Отправляем в Telegram
+    const url = `https://api.telegram.org/bot${token}/sendMessage`;
+    
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -46,9 +41,14 @@ ${data.wishes || 'Нет комментариев'}
       }),
     });
 
+    if (!response.ok) {
+        console.error("Ошибка Telegram API:", await response.text());
+        return NextResponse.json({ error: 'Telegram Error' }, { status: 500 });
+    }
+
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Telegram API Error:', error);
-    return NextResponse.json({ error: 'Ошибка' }, { status: 500 });
+    console.error("Ошибка сервера:", error);
+    return NextResponse.json({ error: 'Internal Error' }, { status: 500 });
   }
 }
