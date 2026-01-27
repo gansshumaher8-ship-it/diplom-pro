@@ -5,25 +5,27 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { name, phone, email, city, documentType, details } = body;
 
-    // --- ТВОИ ДАННЫЕ (Взяты с твоего скриншота) ---
-    const token = '8342323616:AAG1HzWuO4JBGH9Wda8tc3UyRfJhlVaf6Es';
+    // --- ТВОИ ДАННЫЕ (Вставлены из сообщения) ---
+    // Токен (обрати внимание на символы, скопировано точь-в-точь)
+    const token = '8342323616:AAG1HzWu04JBGH9Wda8tc3UyRfJhlVaf6Es';
+    // Твой личный Chat ID
     const chatId = '7833997285'; 
-    // ----------------------------------------------
+    // -------------------------------------------
 
-    console.log("Попытка отправки...", { name, phone });
+    console.log("Отправка заявки...", { name, phone });
 
-    // Формируем сообщение
+    // Текст сообщения
     const message = `
 🔥 <b>НОВАЯ ЗАЯВКА</b>
 
 👤 <b>Имя:</b> ${name}
 📞 <b>Тел:</b> ${phone}
-🏙 <b>Город:</b> ${city || '-'}
-📄 <b>Док:</b> ${documentType}
-📝 <b>Инфо:</b> ${details || '-'}
+🏙 <b>Город:</b> ${city || 'Не указан'}
+📄 <b>Документ:</b> ${documentType}
+📝 <b>Инфо:</b> ${details || 'Нет'}
     `;
 
-    // Отправляем
+    // Запрос к Telegram
     const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -37,7 +39,7 @@ export async function POST(req: Request) {
     const result = await response.json();
 
     if (!result.ok) {
-        console.error("Telegram Error:", result);
+        console.error("Telegram API Error:", result);
         return NextResponse.json({ error: result.description }, { status: 500 });
     }
 
