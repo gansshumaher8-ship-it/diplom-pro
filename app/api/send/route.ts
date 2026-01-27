@@ -5,28 +5,25 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { name, phone, email, city, documentType, details } = body;
 
-    // --- ЗОНА ТЕСТА (ВСТАВЬ ДАННЫЕ СЮДА) ---
-    // Вставь токен прямо в кавычки, например: '54321:AAHGs...'
-    const token = '8342323616:AAG1HzWu04JBGH9Wda8tc3UyRfJhlVaf6Es'; 
-    
-    // Вставь ID чата прямо в кавычки, например: '12345678'
+    // --- ТВОИ ДАННЫЕ (Взяты с твоего скриншота) ---
+    const token = '8342323616:AAG1HzWuO4JBGH9Wda8tc3UyRfJhlVaf6Es';
     const chatId = '7833997285'; 
-    // ----------------------------------------
+    // ----------------------------------------------
 
-    console.log("Попытка отправки...", { name, phone, token: token?.slice(0, 5), chatId });
+    console.log("Попытка отправки...", { name, phone });
 
-    if (!token || !chatId || token === 'ТВОЙ_ТОКЕН_ЗДЕСЬ') {
-      return NextResponse.json({ error: 'Вы не заменили токен в коде!' }, { status: 500 });
-    }
-
+    // Формируем сообщение
     const message = `
-🔥 <b>ТЕСТОВАЯ ЗАЯВКА</b>
+🔥 <b>НОВАЯ ЗАЯВКА</b>
 
 👤 <b>Имя:</b> ${name}
-📞 <b>Телефон:</b> ${phone}
+📞 <b>Тел:</b> ${phone}
+🏙 <b>Город:</b> ${city || '-'}
 📄 <b>Док:</b> ${documentType}
+📝 <b>Инфо:</b> ${details || '-'}
     `;
 
+    // Отправляем
     const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -38,15 +35,15 @@ export async function POST(req: Request) {
     });
 
     const result = await response.json();
-    console.log("Ответ Telegram:", result);
 
     if (!result.ok) {
+        console.error("Telegram Error:", result);
         return NextResponse.json({ error: result.description }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Critical error:", error);
-    return NextResponse.json({ error: 'Server Error' }, { status: 500 });
+    console.error("Server Error:", error);
+    return NextResponse.json({ error: 'Internal Error' }, { status: 500 });
   }
 }
