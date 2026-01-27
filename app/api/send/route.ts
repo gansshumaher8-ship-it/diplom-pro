@@ -2,36 +2,32 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    // Получаем данные из новой формы
-    const { name, phone, email, city, documentType, details } = await req.json();
+    const body = await req.json();
+    const { name, phone, email, city, documentType, details } = body;
 
-    // 1. Проверка настроек (Токен и ID чата должны быть в .env или настройках Vercel)
-    const token = process.env.TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID;
+    // --- ЗОНА ТЕСТА (ВСТАВЬ ДАННЫЕ СЮДА) ---
+    // Вставь токен прямо в кавычки, например: '54321:AAHGs...'
+    const token = '8342323616:AAHiVormNPqvvDjHIUDDNFQMa9GcNpKlGKw'; 
+    
+    // Вставь ID чата прямо в кавычки, например: '12345678'
+    const chatId = '8342323616'; 
+    // ----------------------------------------
 
-    if (!token || !chatId) {
-      console.error("Токен или Chat ID не найдены!");
-      return NextResponse.json({ error: 'Config missing' }, { status: 500 });
+    console.log("Попытка отправки...", { name, phone, token: token?.slice(0, 5), chatId });
+
+    if (!token || !chatId || token === 'ТВОЙ_ТОКЕН_ЗДЕСЬ') {
+      return NextResponse.json({ error: 'Вы не заменили токен в коде!' }, { status: 500 });
     }
 
-    // 2. Формируем красивое сообщение
     const message = `
-🔥 <b>НОВАЯ ЗАЯВКА (DiplomPro)</b>
+🔥 <b>ТЕСТОВАЯ ЗАЯВКА</b>
 
-👤 <b>Клиент:</b> ${name}
-📞 <b>Телефон:</b> <code>${phone}</code>
-📧 <b>Email:</b> ${email ? email : 'Не указан'}
-🏙 <b>Город:</b> ${city || 'Не указан'}
-
-📄 <b>Документ:</b> ${documentType}
-📝 <b>Комментарий:</b>
-<i>${details || 'Нет комментария'}</i>
+👤 <b>Имя:</b> ${name}
+📞 <b>Телефон:</b> ${phone}
+📄 <b>Док:</b> ${documentType}
     `;
 
-    // 3. Отправляем в Telegram
-    const url = `https://api.telegram.org/bot${token}/sendMessage`;
-    
-    const response = await fetch(url, {
+    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -41,14 +37,16 @@ export async function POST(req: Request) {
       }),
     });
 
-    if (!response.ok) {
-        console.error("Ошибка Telegram API:", await response.text());
-        return NextResponse.json({ error: 'Telegram Error' }, { status: 500 });
+    const result = await response.json();
+    console.log("Ответ Telegram:", result);
+
+    if (!result.ok) {
+        return NextResponse.json({ error: result.description }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Ошибка сервера:", error);
-    return NextResponse.json({ error: 'Internal Error' }, { status: 500 });
+    console.error("Critical error:", error);
+    return NextResponse.json({ error: 'Server Error' }, { status: 500 });
   }
 }
