@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { 
-  Shield, CheckCircle, Clock, FileText, Send, ChevronRight, ChevronDown, ChevronUp, 
+  Shield, CheckCircle, FileText, Send, ChevronRight, ChevronDown, ChevronUp, 
   Phone, Menu, X, Award, EyeOff, Truck, Star, Building, 
   GraduationCap, Calendar
 } from 'lucide-react';
@@ -72,7 +72,6 @@ const products = [
   },
 ];
 
-// ... (Остальные массивы reviews и faqs остаются без изменений, скопируй их из прошлого файла) ...
 const reviews = [
   { name: "Александр, Москва", text: "Потерял диплом 2003 года при переезде. Восстанавливать официально — куча бюрократии. Здесь сделали копию на старом бланке за день. Бумага та самая, шершавая.", date: "24.01.2026" },
   { name: "Ирина В.", text: "Заказывала диплом магистра 2024 года. Очень переживала за проверку, но бланк светится под ультрафиолетом как надо. Водяные знаки есть. Спасибо!", date: "21.01.2026" },
@@ -142,7 +141,8 @@ export default function LandingPage() {
               <a href="#delivery" onClick={() => setIsMobileMenuOpen(false)}>Доставка</a>
               <a href="#faq" onClick={() => setIsMobileMenuOpen(false)}>Вопросы</a>
            </nav>
-           <button onClick={() => window.open('https://t.me/DiplomMoskvaBot')} className="mt-auto w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg">Написать в Telegram</button>
+           {/* Ссылка на техподдержку */}
+           <button onClick={() => window.open('https://t.me/Diplompro777')} className="mt-auto w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg">Написать в Telegram</button>
         </div>
       )}
 
@@ -150,7 +150,8 @@ export default function LandingPage() {
       <header className="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-50 border-b border-slate-100">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center gap-3">
-             <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-200">D</div>
+             {/* ЛОГОТИП (Замените /logo.png на имя вашего файла в папке public) */}
+             <img src="/logo.png" alt="DiplomPro" className="w-12 h-12 object-contain" />
              <div className="leading-none">
                 <div className="font-bold text-lg">Diplom<span className="text-blue-600">Pro</span></div>
                 <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Москва и РФ</div>
@@ -166,10 +167,11 @@ export default function LandingPage() {
           </nav>
 
           <div className="flex items-center gap-4">
-             <a href="tel:84996434403" className="hidden md:block font-bold text-slate-900 hover:text-blue-600">8 (499) 643-44-03</a>
+             {/* Номер телефона удален */}
              <button onClick={() => setIsMobileMenuOpen(true)} className="xl:hidden p-2"><Menu className="w-8 h-8 text-slate-800" /></button>
-             <button onClick={() => window.open('https://t.me/DiplomMoskvaBot')} className="hidden xl:flex bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition shadow-lg shadow-blue-200 items-center gap-2">
-               <Send className="w-4 h-4" /> Telegram
+             {/* Кнопка ведет на техподдержку (Личный аккаунт) */}
+             <button onClick={() => window.open('https://t.me/Diplompro777')} className="hidden xl:flex bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition shadow-lg shadow-blue-200 items-center gap-2">
+               <Send className="w-4 h-4" /> Написать в Telegram
              </button>
           </div>
         </div>
@@ -411,22 +413,6 @@ export default function LandingPage() {
                      </div>
                   </div>
                )}
-            </div>
-         </div>
-      </section>
-
-      <section id="faq" className="py-20 bg-white">
-         <div className="container mx-auto px-4 max-w-3xl">
-            <h2 className="text-3xl font-bold text-center mb-12">Вопрос - Ответ</h2>
-            <div className="space-y-4">
-               {faqs.map((f, i) => (
-                  <div key={i} className="border border-slate-200 rounded-2xl overflow-hidden hover:border-blue-300 transition">
-                     <button onClick={() => setExpandedFaq(expandedFaq === i ? null : i)} className="w-full flex justify-between items-center p-6 text-left font-bold text-lg text-slate-800 bg-white hover:bg-slate-50 transition">
-                        {f.q} {expandedFaq === i ? <ChevronUp className="text-blue-600" /> : <ChevronDown className="text-slate-400" />}
-                     </button>
-                     {expandedFaq === i && <div className="px-6 pb-6 pt-2 bg-slate-50 text-slate-600 leading-relaxed border-t border-slate-100">{f.a}</div>}
-                  </div>
-               ))}
             </div>
          </div>
       </section>
