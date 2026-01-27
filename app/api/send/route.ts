@@ -7,7 +7,7 @@ export async function POST(req: Request) {
 
     // --- ЗОНА ТЕСТА (ВСТАВЬ ДАННЫЕ СЮДА) ---
     // Вставь токен прямо в кавычки, например: '54321:AAHGs...'
-    const token = '8342323616:AAHiVormNPqvvDjHIUDDNFQMa9GcNpKlGKw'; 
+    const token = '8342323616:AAG1HzWu04JBGH9Wda8tc3UyRfJhlVaf6Es'; 
     
     // Вставь ID чата прямо в кавычки, например: '12345678'
     const chatId = '8342323616'; 
