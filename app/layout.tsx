@@ -58,7 +58,38 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>{children}{/* МИКРОРАЗМЕТКА SCHEMA.ORG ДЛЯ ЯНДЕКСА */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Оформление дипломов и аттестатов ГОЗНАК",
+              "description": "Помощь в восстановлении документов об образовании. Официальные бланки. Любые ВУЗы Москвы и РФ. Без предоплаты.",
+              "image": "https://diplom-pro.vercel.app/diplom.jpg", // Если есть картинка, лучше указать
+              "brand": {
+                "@type": "Brand",
+                "name": "DiplomPro"
+              },
+              "offers": {
+                "@type": "Offer",
+                "url": "https://diplom-pro.vercel.app",
+                "priceCurrency": "RUB",
+                "price": "27000",
+                "priceValidUntil": "2025-12-31",
+                "availability": "https://schema.org/InStock",
+                "itemCondition": "https://schema.org/NewCondition"
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "reviewCount": "124"
+              }
+            })
+          }}
+        />
+      </body>
     </html>
   );
 }
